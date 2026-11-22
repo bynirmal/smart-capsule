@@ -39,19 +39,20 @@ capsule, and keeps it after `docker restart smart-capsule`.
 
 ## 2. Render (Blueprint)
 
-`render.yaml` in the repository root defines everything. In Render:
+`render.yaml` in the repository root defines everything, and it is the **free plan**: one click,
+$0, no PC of yours involved. In Render:
 
 1. **New → Blueprint**, pick this repository, apply.
-2. When prompted for `SMART_CAPSULE_PASSWORD`, enter a long password (Render keeps it secret).
-3. Wait for the health check on `/healthz` to go green, then open the URL; the browser asks for
-   any username plus that password.
+2. Wait for the health check on `/healthz` to go green, then open the URL.
 
-**Plan:** SQLite needs a disk, and Render only attaches disks to paid instance types, so the
-blueprint uses `starter` (~$7/mo) with a 1 GB disk at `/data`.
+**Free-plan limits** (Render's rules, not the app's): the service spins down after 15 minutes
+without traffic and takes about a minute to wake on the next request; the container filesystem is
+ephemeral, so **capsules are lost on every redeploy, restart or spin-down** and no disk can be
+attached. Export the capsules you care about as `.scapsule` files and re-import them afterwards.
+The blueprint sets no password; add `SMART_CAPSULE_PASSWORD` in the dashboard to lock the URL.
 
-To try it on the free plan instead, remove the `disk:` block and the `SMART_CAPSULE_HOME` variable.
-The app then writes inside the container: it works, but every deploy or restart starts with an
-empty library, and free instances sleep when idle.
+**Permanent library:** deploy `render.paid.yaml` instead — same image, `0.5c-512mb` instance
+(~$7/mo) plus a 1 GB disk mounted at `/data`, so capsules survive deploys and restarts.
 
 ## 3. Railway / Fly.io
 

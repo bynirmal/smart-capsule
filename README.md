@@ -46,9 +46,10 @@ docker run -d -p 8765:8765 \
   -v smart-capsule-data:/data smart-capsule
 ```
 
-`render.yaml` deploys the same image to Render with a persistent disk. A hosted copy **must** set
-`SMART_CAPSULE_PASSWORD` — otherwise anyone with the URL can read your capsules. Full steps and the
-free-plan trade-off are in [docs/deploy.md](docs/deploy.md).
+`render.yaml` deploys the same image to Render on the free plan (no disk, sleeps when idle, capsules
+are lost on redeploy); `render.paid.yaml` is the same service with a persistent disk. A public copy
+should set `SMART_CAPSULE_PASSWORD` — otherwise anyone with the URL can read your capsules. Full
+steps and the free-plan trade-off are in [docs/deploy.md](docs/deploy.md).
 
 ### 2. Desktop app (CustomTkinter)
 

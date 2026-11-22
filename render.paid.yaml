@@ -1,0 +1,28 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+#
+# SQLite needs a persistent disk, which Render only offers on paid instance
+# types. The `starter` plan below is the cheapest one that keeps your capsules
+# across deploys and restarts. See docs/deploy.md for the free-plan trade-off.
+services:
+  - type: web
+    name: smart-capsule
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    region: frankfurt
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: SMART_CAPSULE_HOME
+        value: /data
+      - key: SMART_CAPSULE_HOST
+        value: 0.0.0.0
+      - key: SMART_CAPSULE_ALLOW_REMOTE
+        value: "1"
+      # Set this in the Render dashboard; the service 401s everything without it.
+      - key: SMART_CAPSULE_PASSWORD
+        sync: false
+    disk:
+      name: capsule-data
+      mountPath: /data
+      sizeGB: 1

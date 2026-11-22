@@ -1,28 +1,35 @@
-# Render Blueprint — https://render.com/docs/blueprint-spec
+# Render Blueprint — free plan (default).
 #
-# SQLite needs a persistent disk, which Render only offers on paid instance
-# types. The `starter` plan below is the cheapest one that keeps your capsules
-# across deploys and restarts. See docs/deploy.md for the free-plan trade-off.
+# This is the blueprint Render picks up from the "Deploy to Render" button, so a
+# single click produces a live URL at $0 with no PC of your own running the app.
+#
+# Free-plan trade-offs, straight from Render's docs:
+#   - the service spins down after 15 minutes without traffic, and the next
+#     request takes about a minute to wake it;
+#   - the container filesystem is ephemeral, so capsules are lost on every
+#     redeploy, restart or spin-down, and no disk can be attached.
+#
+# Export capsules you care about as .scapsule files and re-import them after a
+# rebuild. For a permanent library use render.paid.yaml instead (0.5c-512mb plan
+# plus a 1 GB disk at /data): same image, same URL shape, data survives.
 services:
   - type: web
     name: smart-capsule
     runtime: docker
     dockerfilePath: ./Dockerfile
-    plan: starter
+    plan: free
     region: frankfurt
     healthCheckPath: /healthz
     autoDeploy: true
     envVars:
+      # Writable inside the container and owned by the non-root user; not
+      # persistent, which is the accepted trade-off of the free plan.
       - key: SMART_CAPSULE_HOME
-        value: /data
+        value: /tmp/data
       - key: SMART_CAPSULE_HOST
         value: 0.0.0.0
       - key: SMART_CAPSULE_ALLOW_REMOTE
         value: "1"
-      # Set this in the Render dashboard; the service 401s everything without it.
-      - key: SMART_CAPSULE_PASSWORD
-        sync: false
-    disk:
-      name: capsule-data
-      mountPath: /data
-      sizeGB: 1
+    # No password by default, matching the local setup. To lock the public URL,
+    # add SMART_CAPSULE_PASSWORD under Environment in the Render dashboard and
+    # redeploy; every request then asks for HTTP Basic auth.
