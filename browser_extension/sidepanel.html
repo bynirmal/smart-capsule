@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Smart Capsule side panel</title>
+    <style>
+      body { width: auto; min-width: 280px; height: 100vh; padding: 16px; }
+      .grow { flex: 1; }
+      .log { flex: 1; overflow-y: auto; font-size: 10px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+      .log div { border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+      .actions { display: flex; flex-direction: column; gap: 8px; }
+      .hint-block { font-size: 10px; color: var(--muted); line-height: 1.5; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">◈</div>
+      <div>
+        <div class="brand">SMART <span>CAPSULE</span></div>
+        <div class="tag">SIDE PANEL</div>
+      </div>
+    </header>
+
+    <div class="actions">
+      <button id="capture" class="primary">Capture conversation</button>
+      <button id="selection" class="ghost">Capture selected text</button>
+      <button id="open-app" class="ghost">Open Smart Capsule</button>
+    </div>
+
+    <section class="settings">
+      <label>Bridge token
+        <input id="token" type="password" placeholder="paste bridge_token.txt" />
+      </label>
+      <div class="row">
+        <button id="save" class="small">Save token</button>
+        <span class="hint">Local only</span>
+      </div>
+    </section>
+
+    <div id="status" class="status">Ready.</div>
+    <div class="log" id="log"></div>
+
+    <p class="hint-block">
+      Capture only happens when you press a button. The extension reads the visible conversation, sends it to your
+      local Smart Capsule server with the token above, and never stores cookies or credentials.
+    </p>
+
+    <script src="sidepanel.js"></script>
+  </body>
+</html>

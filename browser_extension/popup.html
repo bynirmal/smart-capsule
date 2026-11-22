@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Smart Capsule</title>
+  </head>
+  <body>
+    <header>
+      <div class="logo">◈</div>
+      <div>
+        <div class="brand">SMART <span>CAPSULE</span></div>
+        <div class="tag">CAPTURE</div>
+      </div>
+    </header>
+
+    <button id="capture" class="primary">Capture this conversation</button>
+    <button id="selection" class="ghost">Capture selected text</button>
+    <button id="panel" class="ghost">Open side panel</button>
+
+    <section class="settings">
+      <label>Bridge endpoint
+        <input id="endpoint" type="text" placeholder="http://127.0.0.1:8765" />
+      </label>
+      <label>Bridge token
+        <input id="token" type="password" placeholder="paste bridge_token.txt" />
+      </label>
+      <div class="row">
+        <button id="save" class="small">Save</button>
+        <span class="hint">Found in the Smart Capsule data folder.</span>
+      </div>
+    </section>
+
+    <div id="status" class="status">Idle</div>
+
+    <footer>
+      <a href="http://127.0.0.1:8765/" target="_blank" rel="noopener">Open web app</a>
+      <span>Local only</span>
+    </footer>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

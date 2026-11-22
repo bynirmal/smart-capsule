@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Smart Capsule Capture",
+  "version": "1.0.0",
+  "description": "Capture an AI conversation from the page and turn it into a portable Smart Capsule.",
+  "minimum_chrome_version": "114",
+  "permissions": ["sidePanel", "activeTab", "scripting", "storage", "tabs"],
+  "host_permissions": [
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://claude.ai/*",
+    "https://gemini.google.com/*",
+    "http://127.0.0.1/*",
+    "http://localhost/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Smart Capsule"
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*"
+      ],
+      "js": ["adapters/adapters.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

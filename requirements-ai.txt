@@ -1,0 +1,22 @@
+# ---------------------------------------------------------------------------
+# SMART CAPSULE - OPTIONAL AI stack
+#
+# The application runs fully without these packages: the AI engine degrades to
+# a deterministic, rule-based extractor and GPU detection falls back to
+# nvidia-smi / CPU-only reporting.
+#
+# Install this file only when you want local neural processing:
+#   python -m pip install -r requirements-ai.txt
+#
+# NOTE: PyTorch publishes wheels for a limited set of Python versions. If pip
+# reports "No matching distribution found for torch", the interpreter in your
+# virtual environment is not yet supported by PyTorch - create the virtual
+# environment with a supported version (3.10 - 3.13) instead. The desktop app
+# and every non-AI feature keep working either way.
+#
+# Ollama users do not need torch at all: install Ollama and enable the
+# built-in HTTP adapter in AI Intelligence settings.
+# ---------------------------------------------------------------------------
+torch>=2.3.0
+transformers>=4.41.0
+sentence-transformers>=3.0.0

@@ -1,0 +1,32 @@
+# Virtual environments
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Freebuff's own project marker
+.freebuff/
+
+# Local user data (never commit capsules, databases or backups)
+.devdata/
+*.db
+*.db-wal
+*.db-shm
+*.scapsule
+exports/
+backups/
+attachments/
+logs/
+
+# Local demo screenshots produced during verification
+webapp-*.png
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

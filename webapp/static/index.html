@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>Smart Capsule — One Click. Complete Context.</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="glow glow-a"></div>
+    <div class="glow glow-b"></div>
+
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo">◈</div>
+          <div class="brand-text">
+            <span class="brand-name">SMART</span>
+            <span class="brand-name accent">CAPSULE</span>
+          </div>
+        </div>
+        <p class="brand-tag">CONTEXT PORTABILITY SUITE</p>
+
+        <nav class="nav">
+          <button class="nav-item active" data-view="capture"><span>⌁</span> Capture</button>
+          <button class="nav-item" data-view="library"><span>▤</span> Library</button>
+          <button class="nav-item" data-view="import"><span>⇩</span> Import</button>
+          <button class="nav-item" data-view="about"><span>⚙</span> About</button>
+        </nav>
+
+        <div class="sidebar-foot">
+          <div class="hw-row">
+            <span class="dot" id="hw-dot"></span>
+            <span id="hw-text">Detecting hardware…</span>
+          </div>
+          <div class="tiny muted" id="version-line">Smart Capsule</div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div>
+            <h1 id="view-title">Capture Conversation</h1>
+            <p id="view-sub" class="muted">Paste a transcript, review the parse, generate a portable capsule.</p>
+          </div>
+          <div class="top-actions">
+            <span class="pill" id="capsule-count">0 capsules</span>
+            <button class="ghost" id="btn-refresh">Refresh</button>
+          </div>
+        </header>
+
+        <!-- ---------------------------------------------------------- -->
+        <section class="view" id="view-capture">
+          <div class="grid capture-grid">
+            <div class="card">
+              <div class="card-head">
+                <h2>Conversation source</h2>
+                <span class="tiny muted">Nothing is stored until you create the capsule</span>
+              </div>
+              <textarea id="source" spellcheck="false"
+                placeholder="User: We need a FastAPI service with JWT auth.&#10;&#10;Assistant: Here is the module.&#10;&#10;User: Next step is adding refresh tokens."></textarea>
+
+              <div class="controls">
+                <label>Platform
+                  <select id="platform">
+                    <option value="">Auto-detect</option>
+                    <option>ChatGPT</option>
+                    <option>Claude</option>
+                    <option>Gemini</option>
+                    <option>Cursor</option>
+                    <option>Copilot</option>
+                    <option>Perplexity</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+                <label>Compression
+                  <select id="mode">
+                    <option value="balanced">Balanced</option>
+                    <option value="high">High compression</option>
+                    <option value="full">Full preservation</option>
+                  </select>
+                </label>
+                <div class="spacer"></div>
+                <button class="ghost" id="btn-preview">Count &amp; preview</button>
+                <button class="primary" id="btn-create">Create capsule</button>
+              </div>
+
+              <div id="preview" class="preview hidden"></div>
+            </div>
+
+            <div class="stack">
+              <div class="card result hidden" id="result-card">
+                <div class="card-head">
+                  <h2 id="result-title">Capsule ready</h2>
+                  <span class="badge success" id="result-badge">Saved</span>
+                </div>
+                <div id="result-body"></div>
+                <div class="controls">
+                  <label>Resume on
+                    <select id="result-destination"></select>
+                  </label>
+                  <button class="ghost" id="btn-result-prompt">Build prompt</button>
+                  <button class="primary" id="btn-copy-result">Copy prompt</button>
+                </div>
+                <textarea id="result-prompt" class="prompt-box" readonly
+                  placeholder="Choose a destination and build the continuation prompt."></textarea>
+                <div class="export-row" id="result-exports"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-head"><h2>Pipeline</h2><span class="tiny muted">4 stages, all local</span></div>
+                <ol class="pipeline">
+                  <li><b>Capture</b><span>Role-aware parsing; code fences preserved byte for byte.</span></li>
+                  <li><b>Organize</b><span>Requirements, decisions, tasks, errors and next action extracted.</span></li>
+                  <li><b>Compress</b><span>Balanced, high or full preservation, with labelled token estimates.</span></li>
+                  <li><b>Continue</b><span>Destination-specific prompt, one click to copy.</span></li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------------------------------------------------------- -->
+        <section class="view hidden" id="view-library">
+          <div class="toolbar">
+            <input id="search" type="search" placeholder="Search titles, summaries, next actions…" />
+            <button class="ghost" id="btn-search">Search</button>
+          </div>
+          <div id="library-list" class="library-list"></div>
+        </section>
+
+        <!-- ---------------------------------------------------------- -->
+        <section class="view hidden" id="view-import">
+          <div class="grid capture-grid">
+            <div class="card">
+              <div class="card-head">
+                <h2>Import a capsule</h2>
+                <span class="tiny muted">.scapsule · .zip · .json</span>
+              </div>
+              <label class="dropzone" id="dropzone">
+                <input type="file" id="import-file" accept=".scapsule,.zip,.json" hidden />
+                <span class="drop-icon">⇩</span>
+                <span>Drop a capsule file here or click to browse</span>
+                <span class="tiny muted">Checksums are verified and nothing is written until validation passes.</span>
+              </label>
+              <div id="import-result" class="preview hidden"></div>
+            </div>
+            <div class="stack">
+              <div class="card">
+                <div class="card-head"><h2>Validation</h2></div>
+                <ul class="checklist">
+                  <li>Archive entries are hash-checked against the manifest.</li>
+                  <li>Paths are sanitised; traversal outside the data folder is rejected.</li>
+                  <li>Format version must be supported by this build.</li>
+                  <li>A failed import changes nothing.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------------------------------------------------------- -->
+        <section class="view hidden" id="view-detail">
+          <div class="detail-head">
+            <button class="ghost" id="btn-back">← Library</button>
+            <div class="spacer"></div>
+            <div class="export-row" id="detail-exports"></div>
+          </div>
+          <div class="grid detail-grid">
+            <div class="stack">
+              <div class="card" id="detail-overview"></div>
+              <div class="card" id="detail-progress"></div>
+              <div class="card" id="detail-code"></div>
+            </div>
+            <div class="stack">
+              <div class="card" id="detail-edit"></div>
+              <div class="card" id="detail-prompt"></div>
+              <div class="card" id="detail-meta"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---------------------------------------------------------- -->
+        <section class="view hidden" id="view-about">
+          <div class="grid capture-grid">
+            <div class="card">
+              <div class="card-head"><h2>Smart Capsule Web</h2><span class="badge">Local</span></div>
+              <p class="muted">
+                This interface runs entirely on your machine and shares its database and engines with the
+                desktop application. No conversation leaves the computer unless you copy a prompt yourself.
+              </p>
+              <div id="about-status" class="kv"></div>
+              <h3>HTTP API</h3>
+              <pre class="api-list">GET    /api/status
+POST   /api/preview              { text, platform }
+POST   /api/capsules             { text, platform, mode }
+GET    /api/capsules?q=
+GET    /api/capsules/{id}
+PATCH  /api/capsules/{id}        { name, objective, next_action }
+DELETE /api/capsules/{id}
+GET    /api/capsules/{id}/prompt?destination=Claude
+GET    /api/capsules/{id}/export?format=scapsule
+POST   /api/import?filename=x.scapsule
+POST   /api/bridge/capture       (X-SmartCapsule-Token)</pre>
+            </div>
+            <div class="stack">
+              <div class="card">
+                <div class="card-head"><h2>Desktop application</h2></div>
+                <p class="muted">The same capsule library, GPU monitor and floating Sidekick:</p>
+                <pre class="api-list">.venv\Scripts\python.exe main.py
+.venv\Scripts\python.exe main.py --smoke</pre>
+              </div>
+              <div class="card">
+                <div class="card-head"><h2>Browser extension bridge</h2></div>
+                <p class="muted">
+                  The Chrome extension authenticates with a per-install token. Its path is:
+                </p>
+                <pre class="api-list" id="bridge-path">…</pre>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
