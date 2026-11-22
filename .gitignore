@@ -30,3 +30,6 @@ webapp-*.png
 Thumbs.db
 .idea/
 .vscode/
+
+# Source archive produced by packaging
+*.zip
