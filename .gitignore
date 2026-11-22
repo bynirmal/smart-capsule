@@ -33,3 +33,4 @@ Thumbs.db
 
 # Source archive produced by packaging
 *.zip
+tools/
